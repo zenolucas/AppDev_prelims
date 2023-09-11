@@ -5,7 +5,7 @@
         bool login(string username, string password)
         {
                 // onto checking matches in database
-                ifstream filereader { "users.txt" };
+                ifstream filereader { "database/users.txt" };
 
                 if (!filereader)
                 {
@@ -18,17 +18,31 @@
                     string line;
                     getline(filereader, line);
 
-                    // check if username exists in the database
-                    int delimiterIndex = line.find(",");
-                    if (line.substr(0, delimiterIndex) == username)
+                    // to store each element separated by comma in the csv line
+                    string element;
+
+                    // string vector to store csv values
+                    vector<string> v;
+                    stringstream ss(line);
+
+                    while (ss.good())
                     {
-                        // check if password matches
-                        if (line.substr(delimiterIndex + 2) == password)
+                        getline(ss, element, ',');
+                        if (username == element)
                         {
-                           return true;
+                            // if username matches, then check password.
+                            getline(ss, element, ',');
+                            if (password == element)
+                            {
+                                return true;
+                            }
                         }
-                        break;
+                        else
+                        {
+                            break;
+                        }
                     }
+                    
                 }
                 cout << "wrong username or password" << endl;
                 return false;
@@ -92,3 +106,15 @@
                 }
             }
         }
+
+
+
+
+
+
+
+        // as a staff, I would first log in the clinic computer
+        // where's the database? in 1 computer that's connected to the servers.
+        // so... after logging in, 
+        // the program would have to know what clinic letter I am part in
+        // so that the program knows which clinicQueue.txt to modify.
